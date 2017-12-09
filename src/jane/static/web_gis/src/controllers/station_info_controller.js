@@ -17,7 +17,7 @@ baynetApp.controller('stationInfoController', function ($scope, $log, stations) 
             // A bit ugly but I'm currently not sure how to do it in a
             // better way. Should work well enough I guess.
             jQuery.ajax({
-                url: chan["attachments_url"],
+                url: chan["attachments_url"].replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088'),
                 success: function (result) {
                     chan["attachments"] = result.results;
                 },
