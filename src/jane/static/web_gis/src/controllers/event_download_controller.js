@@ -10,7 +10,7 @@ baynetApp.controller('eventDownloadController', function($scope, $log) {
 
     function aj(url) {
         return $.ajax({
-            url: url.replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088'),
+            url: url.replace('marum.geophysik.uni-muenchen.de:8080', 'rotations-database.geophysik.uni-muenchen.de'),
             success: function(data) {
                 var filename = url.split("/");
                 filename = filename[filename.length - 2];

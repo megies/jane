@@ -480,7 +480,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
 
                 var events_to_download = [];
                 $scope.event_layer.getSource().forEachFeatureIntersectingExtent(extent, function(feature) {
-                    events_to_download.push(feature.get("containing_document_data_url").replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088'));
+                    events_to_download.push(feature.get("containing_document_data_url").replace('marum.geophysik.uni-muenchen.de:8080', 'rotations-database.geophysik.uni-muenchen.de'));
                 });
 
                 if (events_to_download.length > 0) {
@@ -612,10 +612,10 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             show: true});
 
                         // Set scope of modal.
-                        modal.$scope.attachments_url = feature.get("attachments_url").replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088');
+                        modal.$scope.attachments_url = feature.get("attachments_url").replace('marum.geophysik.uni-muenchen.de:8080', 'rotations-database.geophysik.uni-muenchen.de');
                         modal.$scope.attachments_count = feature.get("attachments_count");
-						modal.$scope.containing_document_data_url = feature.get("containing_document_data_url").replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088');
-                        modal.$scope.url = feature.get("url").replace('marum.geophysik.uni-muenchen.de', 'erde.geophysik.uni-muenchen.de:8088');
+						modal.$scope.containing_document_data_url = feature.get("containing_document_data_url").replace('marum.geophysik.uni-muenchen.de:8080', 'rotations-database.geophysik.uni-muenchen.de');
+                        modal.$scope.url = feature.get("url").replace('marum.geophysik.uni-muenchen.de:8080', 'rotations-database.geophysik.uni-muenchen.de');
                         modal.$scope.agency = feature.get("agency");
                         modal.$scope.author = feature.get("author");
                         modal.$scope.depth_in_m = feature.get("depth_in_m");
