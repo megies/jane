@@ -206,6 +206,40 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
 
             };
 
+            //Nick -Start Block- Get a date with only year month and day
+            var date_YMD=function(date_input){
+                date_var=new Date(date_input.getUTCFullYear(),date_input.getUTCMonth(),date_input.getUTCDate());
+                return date_var;
+            }
+            //console.log("Checkpoint: %s", $scope.event_settings.max_date); //Nick erase_this
+            var get_HexColor= function(date_input){
+                var Date_Scale=(date_YMD($scope.event_settings.max_date) - date_YMD($scope.event_settings.min_date));
+                var Date_in_interval=(date_YMD(date_input) - date_YMD($scope.event_settings.min_date));
+                var Norm_value=parseInt((Date_in_interval/Date_Scale)*100);//16777215); //(this is for normalization wrt total hexnumber values)
+                //var conv_to_hex='#'+(Norm_value*0xFFFFFF<<0).toString(16); //Get error of many inexistent color values
+                if (Norm_value < 10) { 
+                    conv_to_hex='#000000';
+                    } else if (Norm_value < 20) { 
+                    conv_to_hex='#0d3300';
+                    } else if (Norm_value < 30) { 
+                    conv_to_hex='#1a6600';
+                    } else if (Norm_value < 40) { 
+                    conv_to_hex='#269900';
+                    } else if (Norm_value < 50) { 
+                    conv_to_hex='#33cc00';
+                    } else if (Norm_value < 60) { 
+                    conv_to_hex='#40ff00';
+                    } else if (Norm_value < 70) { 
+                    conv_to_hex='#66ff33';
+                    } else if (Norm_value < 80) { 
+                    conv_to_hex='#8cff66';
+                    } else if (Norm_value < 90) { 
+                    conv_to_hex='#b3ff99';
+                    } else { 
+                    conv_to_hex='#d9ffcc';
+                    }
+                return conv_to_hex;
+            } //Nick -End of Block-
             var get_style_function = function(colors) {
                 var styleCache = {};
                 var styleFunction = function(feature, resolution) {
@@ -215,6 +249,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                     var magnitude;
                     var radius;
                     var tag;
+                    var event_date; //Nick
 
                     // Events without a magnitude have a big red stroke
                     // around them so they are very visible.
@@ -231,6 +266,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         radius = Math.max(((magnitude + 3.0) / 11) * 29.0 + 1, 0.5);
                         tag = radius;
                     }
+                    event_date = feature.get('origin_time'); //Nick
+                    
 
                     var style = styleCache[tag];
                     if (!style) {
@@ -239,7 +276,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             image: new ol.style.Circle({
                                 radius: radius,
                                 fill: new ol.style.Fill({
-                                    color: c
+                                    color: c  //get_HexColor(event_date)//"#ffb732" //Nick
                                 }),
                                 stroke: new ol.style.Stroke({
                                     color: stroke_color,
