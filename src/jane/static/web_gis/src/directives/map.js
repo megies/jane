@@ -276,7 +276,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             image: new ol.style.Circle({
                                 radius: radius,
                                 fill: new ol.style.Fill({
-                                    color: c  //get_HexColor(event_date)//"#ffb732" //Nick
+                                    color: get_HexColor(event_date)//c //Nick
                                 }),
                                 stroke: new ol.style.Stroke({
                                     color: stroke_color,
