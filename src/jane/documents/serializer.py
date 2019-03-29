@@ -33,11 +33,11 @@ class DocumentTypeHyperlinkedIdentifyField(
         kwargs = {self.lookup_url_kwarg: lookup_value}
 
         # Deal with documents as well as indices and attachments.
-        if hasattr(obj, "document_type"):
+        if hasattr(obj, "document_type"):  # document
             kwargs["document_type"] = obj.document_type.name
-        elif hasattr(obj, "document"):
+        elif hasattr(obj, "document"):  # document index
             kwargs["document_type"] = obj.document.document_type.name
-        else:
+        else:  # attachment
             kwargs["document_type"] = obj.index.document.document_type.name
             kwargs["idx"] = obj.index_id
 
@@ -68,12 +68,12 @@ class DocumentIndexAttachmentSerializer(serializers.ModelSerializer):
             'data_url',
             'category',
             'content_type',
+            'station',
             'created_at',
             'modified_at',
             'created_by',
             'modified_by'
         )
-
 
 class DocumentIndexSerializer(serializers.ModelSerializer):
 
@@ -81,6 +81,11 @@ class DocumentIndexSerializer(serializers.ModelSerializer):
         view_name='rest_document_indices-detail',
         lookup_field="pk",
         read_only=True
+    )
+
+    containing_document_id = serializers.IntegerField(
+        source='document_id',
+        read_only=True,
     )
 
     containing_document_url = DocumentTypeHyperlinkedIdentifyField(
@@ -101,6 +106,14 @@ class DocumentIndexSerializer(serializers.ModelSerializer):
 
     indexed_data = serializers.DictField(source="json")
 
+    stations = serializers.SerializerMethodField()
+
+    def get_stations(self, obj):
+        return obj.attachments\
+            .order_by('station_id').distinct('station_id')\
+            .exclude(station=None)\
+            .values_list('station', flat=True)
+
     attachments_url = DocumentTypeHyperlinkedIdentifyField(
         view_name='rest_document_index_attachments-list',
         lookup_field="pk",
@@ -115,11 +128,13 @@ class DocumentIndexSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'url',
+            'containing_document_id',
             'containing_document_url',
             'containing_document_data_url',
             'data_content_type',
             'indexed_data',
             'geometry',
+            'stations',
             'attachments_url',
             'attachments_count',
         ]

@@ -116,6 +116,26 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 })
             };
 
+            $scope.change_station = function(station_id) {
+              $scope.current_station = $scope.stations[station_id];
+              $scope.event_settings.selected_station = parseInt(station_id, 10);
+              $scope.station_settings.selected_station = parseInt(station_id, 10);
+
+              // Update events based on the selected station
+              $scope.update_event_source(
+                  $scope.geojson_events,
+                  $scope.show_event_layer,
+                  $scope.event_layer_show_points,
+                  $scope.event_settings);
+
+              // Update stations based on the selected station
+              $scope.update_station_source(
+                  $scope.geojson_stations,
+                  $scope.show_station_layer,
+                  $scope.station_colors,
+                  $scope.station_settings);
+            };
+
             $scope.base_layer_names_dropdown = _($scope.baseLayers)
                 .keys()
                 .map(function(i) {
@@ -275,6 +295,11 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                                 return false
                             }
                         }
+                        // If selected station is a specific station, show only that station.
+                        if (station_settings.selected_station !== $scope.default_station_id &&
+                            (i.properties.id !== station_settings.selected_station)) {
+                            return false;
+                        }
 
                         return true
                     })
@@ -315,6 +340,12 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             (i.properties.depth_in_km < event_settings.depth_range[0]) ||
                             (i.properties.depth_in_km > event_settings.depth_range[1]) ||
                             !_.contains(event_settings.selected_agencies, i.properties.agency)) {
+                            return false;
+                        }
+
+                        // If selected station is a specific station, show only events recorded by that station.
+                        if (event_settings.selected_station !== $scope.default_station_id &&
+                            !_.contains(i.stations, event_settings.selected_station)) {
                             return false;
                         }
 

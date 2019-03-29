@@ -90,7 +90,8 @@ module.factory('events', function($http, $log, jane_server) {
                                 "coordinates": [
                                     j.longitude, j.latitude
                                 ]
-                            }
+                            },
+                            "stations": i.stations,
                         };
                     }).value();
                 // Update the event set.
@@ -133,6 +134,7 @@ module.factory('stations', function($http, $log, jane_server) {
                         stations[station_id] = {
                             "type": "Feature",
                             "properties": {
+                                "id": item.containing_document_id,
                                 "network": j.network,
                                 "network_name": j.network_name,
                                 "station": j.station,
@@ -207,10 +209,13 @@ module.factory('stations', function($http, $log, jane_server) {
 
 module.controller("BayNetController", function($scope, $log, stations, station_colors,
                                                events, event_colors, current_user) {
-
     current_user.success(function (data) {
         $scope.current_user = data.username;
-    })
+    });
+
+    $scope.default_station_id = 0;
+    $scope.default_station_name = "Any";
+    $scope.current_station = $scope.default_station_name;
 
     $scope.center = {
 		latitude: 10,
@@ -251,6 +256,7 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
         "magnitude_range": [7, 10],
         "correlation_range": [0.7, 1],
         "depth_range": [0,100],
+        "selected_station": $scope.default_station_id,
         "selected_agencies": [],
         "agency_colors": {},
         "agency_icons": [],
@@ -263,7 +269,8 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     $scope.station_settings = {
         "min_date": new Date("2007-07-18"),
         "max_date": new Date(),
-        "grey_out_inactive_stations": true
+        "grey_out_inactive_stations": true,
+        "selected_station": $scope.default_station_id
     };
 
     $scope.station_colors = {};
@@ -327,6 +334,32 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
         _.forEach(networks, function(i, d) {
             $scope.station_colors[i] = station_colors[d % station_colors.length];
         });
+
+        $scope.stations = {};
+        $scope.stations[$scope.default_station_id] = $scope.default_station_name;
+
+        for (var i = 0; i < f.length; i++) {
+            var prop = f[i].properties;
+            var name = prop.network + '.' + prop.station;
+            var id = prop.id;
+
+            // Properties only contain coordinates, so the locations are hardcoded here for convenience.
+            if (prop.station === 'ROMY')
+                name += ' (Fürstenfeldbruck)';
+            else if (prop.station === 'RLAS')
+                name += ' (Wettzell)';
+
+            $scope.stations[id] = name;
+        }
+
+        $scope.station_dropdown = _($scope.stations)
+            .keys()
+            .map(function(i) {
+                return {
+                    "text": $scope.stations[i],
+                    "click": "change_station('" + i + "')"
+                }
+            }).value();
 
         $scope.update_station_source(
             $scope.geojson_stations,

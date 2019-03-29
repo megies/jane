@@ -586,7 +586,7 @@ class DocumentIndexAttachmentManager(models.Manager):
 
     def add_or_modify_attachment(self, document_type, index_id,
                                  content_type, category,
-                                 data, user, pk=None):
+                                 data, user, station, pk=None):
         """
         Add a new or modify an existing attachment.
 
@@ -601,6 +601,8 @@ class DocumentIndexAttachmentManager(models.Manager):
         :param data: The data as a byte string.
         :param user: The user object responsible for the action. Must be
             passed to ensure a consistent handling of permissions.
+        :param station: The related station either as a
+            jane.documents.models.Document instance or as a string. Can be null.
         :param pk: The primary key of the attachment. If given, an existing
             one will modified, if not, a new one will be created.
         """
@@ -614,6 +616,9 @@ class DocumentIndexAttachmentManager(models.Manager):
             document_type = get_object_or_404(
                 DocumentType, name=document_type)
         document_type_str = document_type.name
+
+        if station is not None and not isinstance(station, Document):
+            station = get_object_or_404(Document, name=station)
 
         # The user in question must have the permission to modify documents
         # of that type.
@@ -636,6 +641,7 @@ class DocumentIndexAttachmentManager(models.Manager):
             )
             stat = status.HTTP_201_CREATED
 
+        attachment.station = station
         attachment.category = category
         attachment.content_type = content_type
         attachment.modified_by = user
@@ -655,6 +661,11 @@ class DocumentIndexAttachment(models.Model):
     index = models.ForeignKey(DocumentIndex, related_name='attachments')
     category = models.CharField(max_length=50, db_index=True)
     content_type = models.CharField(max_length=255)
+    station = models.ForeignKey(Document,
+                                on_delete=models.PROTECT,
+                                limit_choices_to={'document_type': 'stationxml'},
+                                null=True,
+                                related_name='+')
     data = models.BinaryField()
     # Attachments are almost independent from Documents thus they should
     # have people responsible for them.

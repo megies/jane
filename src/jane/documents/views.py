@@ -122,6 +122,12 @@ class DocumentIndexAttachmentsView(mixins.RetrieveModelMixin,
                                               "in the HTTP header.")
         category = request.stream.META["HTTP_CATEGORY"]
 
+        # The station header is optional.
+        if "HTTP_STATION" in request.stream.META:
+            station = request.stream.META["HTTP_STATION"]
+        else:
+            station = None
+
         models.DocumentIndexAttachment.objects.add_or_modify_attachment(
             document_type=document_type,
             index_id=idx,
@@ -129,6 +135,7 @@ class DocumentIndexAttachmentsView(mixins.RetrieveModelMixin,
             category=category,
             data=request.data.body,
             user=request.user,
+            station=station,
             pk=pk)
 
         return Response(
