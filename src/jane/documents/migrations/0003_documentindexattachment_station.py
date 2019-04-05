@@ -51,7 +51,7 @@ def determine_station(apps, schema_editor):
 
     # Check whether there are any attachments which are not updated
     # If this triggers this script should be updated to account for these attachments
-    if len(attachments.objects.filter(station=None).exclude(category='Processing Results')) > 0:
+    if attachments.objects.filter(station=None).exclude(category='Processing Results').count() > 0:
         raise ValueError("Not all attachments could be migrated")
 
 
