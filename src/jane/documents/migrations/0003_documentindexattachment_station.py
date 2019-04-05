@@ -47,7 +47,7 @@ def determine_station(apps, schema_editor):
     attachments.objects.filter(category='Event Information').update(station=rlas)
     attachments.objects.filter(category='Waveform Comparison').update(station=rlas)
     attachments.objects.filter(category='Correlation/Backazimuth').update(station=rlas)
-    attachments.objects.filter(category='P-Code Comparison').update(station=rlas)
+    attachments.objects.filter(category='P-Coda Comparison').update(station=rlas)
 
     # Check whether there are any attachments which are not updated
     # If this triggers this script should be updated to account for these attachments
