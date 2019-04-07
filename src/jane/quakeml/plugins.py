@@ -120,6 +120,7 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
         "has_focal_mechanism": "bool",
         "has_moment_tensor": "bool",
         "rlas_pcc": "float",
+        "romy_pcc": "float",
         # "rotational_parameters": "dict",
     }
 
@@ -217,11 +218,12 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
                 event.creation_info and event.creation_info.author or None,
                 "public": public,
                 "evaluation_mode": evaluation_mode,
-                "event_type": 
+                "event_type":
                 event.event_type.capitalize() if event.event_type else None,
                 "has_focal_mechanism": has_focal_mechanism,
                 "has_moment_tensor": has_moment_tensor,
                 "rlas_pcc": rotational_parameters['RLAS']['pcc'],
+                "romy_pcc": rotational_parameters['ROMY']['pcc'],
                 # "rotational_parameters": rotational_parameters,
                 # The special key geometry can be used to store geographic
                 # information about the indexes geometry. Useful for very

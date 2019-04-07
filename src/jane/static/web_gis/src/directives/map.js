@@ -334,9 +334,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         if ((i.properties.origin_time < event_settings.min_date) ||
                             (i.properties.origin_time > event_settings.max_date) ||
                             (i.properties.magnitude < event_settings.magnitude_range[0]) ||
-                            (i.properties.magnitude > event_settings.magnitude_range[1]) || 
-                            (i.properties.rlas_pcc < event_settings.correlation_range[0]) ||
-                            (i.properties.rlas_pcc > event_settings.correlation_range[1]) ||
+                            (i.properties.magnitude > event_settings.magnitude_range[1]) ||
                             (i.properties.depth_in_km < event_settings.depth_range[0]) ||
                             (i.properties.depth_in_km > event_settings.depth_range[1]) ||
                             !_.contains(event_settings.selected_agencies, i.properties.agency)) {
@@ -346,6 +344,37 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         // If selected station is a specific station, show only events recorded by that station.
                         if (event_settings.selected_station !== $scope.default_station_id &&
                             !_.contains(i.stations, event_settings.selected_station)) {
+                            return false;
+                        }
+
+                        // Correlation is defined per station, so compare the range to the station(s) selected.
+                        var min_pcc = Number.MAX_VALUE;
+                        var max_pcc = Number.MIN_VALUE;
+
+                        if (event_settings.selected_station === $scope.default_station_id) { // Any
+                            // Select the most generous range based on the stations defined for this event.
+                            // Thus, the event will be shown if any station falls within the selected range.
+                            if (typeof i.properties.rlas_pcc !== 'undefined') {
+                                min_pcc = Math.min(i.properties.rlas_pcc, min_pcc);
+                                max_pcc = Math.max(i.properties.rlas_pcc, max_pcc);
+                            }
+                            if (typeof i.properties.romy_pcc !== 'undefined') {
+                                min_pcc = Math.min(i.properties.romy_pcc, min_pcc);
+                                max_pcc = Math.max(i.properties.romy_pcc, max_pcc);
+                            }
+                        }
+                        else if ($scope.stations[event_settings.selected_station].indexOf('BW.ROMY') !== -1) { // ROMY
+                            min_pcc = i.properties.romy_pcc;
+                            max_pcc = i.properties.romy_pcc;
+                        }
+                        else if ($scope.stations[event_settings.selected_station].indexOf('BW.RLAS') !== -1) { // RLAS
+                            min_pcc = i.properties.rlas_pcc;
+                            max_pcc = i.properties.rlas_pcc;
+                        }
+
+                        // Hide events that do not fall within the selected correlation range.
+                        if ((max_pcc < event_settings.correlation_range[0]) ||
+                            (min_pcc > event_settings.correlation_range[1])) {
                             return false;
                         }
 
