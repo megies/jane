@@ -252,6 +252,8 @@ class DocumentIndexManager(models.GeoManager):
         # improve query performance for foreignkeys
         queryset = queryset.\
             select_related('document', 'document__document_type')
+        queryset = queryset.\
+            prefetch_related('stations')
         # defer data
         queryset = queryset.defer('document__data')
         # annotate number of attachments
@@ -507,6 +509,7 @@ class DocumentIndex(models.Model):
     json = jsonb.JSONField(verbose_name="JSON")
     geometry = models.GeometryCollectionField(blank=True, null=True,
                                               geography=True)
+    stations = models.ManyToManyField(Document, through='DocumentIndexAttachment')
 
     objects = DocumentIndexManager()
 

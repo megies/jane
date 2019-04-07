@@ -109,10 +109,11 @@ class DocumentIndexSerializer(serializers.ModelSerializer):
     stations = serializers.SerializerMethodField()
 
     def get_stations(self, obj):
-        return obj.attachments\
-            .order_by('station_id').distinct('station_id')\
-            .exclude(station=None)\
-            .values_list('station', flat=True)
+        stations = []
+        for s in obj.stations.all():
+            if s.id not in stations:
+                stations.append(s.id)
+        return stations
 
     attachments_url = DocumentTypeHyperlinkedIdentifyField(
         view_name='rest_document_index_attachments-list',
