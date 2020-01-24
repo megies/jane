@@ -61,6 +61,39 @@ module.factory('current_user', function ($http) {
 });
 
 
+// Factory dealing with arbitrary geojson objects
+module.factory('geojson', function($http, $log, jane_server) {
+    return {
+        geojson: {
+            "type": "FeatureCollection",
+            "features": []
+        },
+        update: function() {
+            var self = this;
+            var url = jane_server + "/rest/document_indices/geojson?limit=20000";
+            $http.get(url).success(function(data) {
+                var data = _(data.results)
+                    .map(function(i) {
+                        var j = i.indexed_data;
+                        // Now create GeoJSON
+                        var geojson = {
+                            "type": "Feature",
+                            "properties": j,
+                            "geometry": JSON.parse(j.geometry_string),
+                        };
+                        return geojson;
+                    }).value();
+                // Update the event set.
+                self.geojson.features.length = 0;
+                _.forEach(data, function(i) {
+                    self.geojson.features.push(i);
+                });
+            })
+        }
+    }
+});
+
+
 // Factory dealing with events.
 module.factory('events', function($http, $log, jane_server) {
     return {
@@ -222,7 +255,7 @@ module.factory('stations', function($http, $log, jane_server) {
 
 module.controller("BayNetController", function($scope, $log, stations, station_colors,
                                                events, event_agency_colors,
-                                               event_site_colors, current_user) {
+                                               event_site_colors, current_user, geojson) {
 
     current_user.success(function (data) {
         $scope.current_user = data.username;
@@ -256,9 +289,13 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     stations.update();
     $scope.geojson_stations = stations.stations;
 
+    geojson.update();
+    $scope.geojson_geojson = geojson.geojson;
+
     // Flags.
     $scope.show_event_layer = true;
     $scope.show_station_layer = true;
+    $scope.show_geojson_layer = true;
     $scope.event_layer_show_points = true;
 
     var currentDate = new Date();
@@ -287,6 +324,9 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
         "min_date": new Date("2000-01-01"),
         "max_date": currentDate,
         "grey_out_inactive_stations": true
+    };
+
+    $scope.geojson_settings = {
     };
 
     $scope.station_colors = {};
@@ -390,6 +430,14 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
             $scope.station_settings);
     });
 
+
+    $scope.$watchCollection("geojson_geojson.features", function(f) {
+        $scope.update_geojson_source(
+            $scope.geojson_geojson,
+            $scope.show_geojson_layer,
+            $scope.geojson_settings);
+    });
+
     $scope.$watch("show_station_layer", function(new_value, old_value) {
         if (new_value == old_value) {
             return;
@@ -424,6 +472,16 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
             $scope.event_settings);
     });
 
+    $scope.$watch("show_geojson_layer", function(new_value, old_value) {
+        if (new_value == old_value) {
+            return;
+        }
+        $scope.update_geojson_source(
+            $scope.geojson_geojson,
+            $scope.show_geojson_layer,
+            $scope.geojson_settings);
+    });
+
     $scope.$watchCollection(
         "event_settings", function() {
             $scope.update_event_source(
@@ -441,6 +499,15 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
                 $scope.show_station_layer,
                 $scope.station_colors,
                 $scope.station_settings);
+        }
+    );
+
+    $scope.$watchCollection(
+        "geojson_settings", function() {
+            $scope.update_geojson_source(
+                $scope.geojson_geojson,
+                $scope.show_geojson_layer,
+                $scope.geojson_settings);
         }
     );
 

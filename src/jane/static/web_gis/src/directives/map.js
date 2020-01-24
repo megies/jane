@@ -280,6 +280,42 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 return styleFunction;
             };
 
+            $scope.geojson_layer = {};
+
+            $scope.update_geojson_source = function(feature_collection, show_layer, geojson_settings) {
+                var geojson = {
+                    "type": "FeatureCollection",
+                    // omit filtering for now
+                    "features": feature_collection.features,
+                    //"features": _.filter(feature_collection.features, function(i) {
+                    //    return true;
+                    //})
+                };
+                if ($scope.geojson_layer) {
+                    map.removeLayer($scope.geojson_layer);
+                    $scope.geojson_layer = {};
+                }
+                if (show_layer === false) {
+                    return;
+                }
+
+                $scope.geojson_layer = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: (new ol.format.GeoJSON()).readFeatures(geojson, {
+                            // Data is in WGS84.
+                            dataProjection: "EPSG:4326",
+                            // Map has a spherical mercator projection.
+                            featureProjection: "EPSG:3857"
+                        })
+                    }),
+                    // rely on default style for now
+                    //style: get_style_function_stations(colors)
+                });
+
+                map.addLayer($scope.geojson_layer);
+            };
+
+
             $scope.station_layer = {};
 
             $scope.update_station_source = function(feature_collection, show_layer, colors, station_settings) {
@@ -465,6 +501,9 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 if (feature.get('network')) {
                     return "station"
                 }
+                if (feature.get('geometry_string')) {
+                    return "geojson"
+                }
                 return "event"
             };
 
@@ -539,6 +578,26 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             " | Lng: " + feature.get('longitude').toFixed(4) +
                             " | Depth: " + (feature.get('depth_in_m') / 1000).toFixed(1) + " km";
                     }
+                    else if (detectFeatureType(feature) == "geojson") {
+                        if (feature.get('site')) {
+                            tooltip_title = 'Standort: ' + feature.get('site');
+                        }
+                        else {
+                            tooltip_title = 'Standort: ---';
+                        }
+                        if (feature.get('category')) {
+                            tooltip_title += '\nKategorie: ' + feature.get('category');
+                        }
+                        else {
+                            tooltip_title += '\nKategorie: ---';
+                        }
+                        if (feature.get('name')) {
+                            tooltip_title += '\nName: ' + feature.get('name');
+                        }
+                        else {
+                            tooltip_title += '\nName: ---';
+                        }
+                    }
                     else {
                         tooltip_title = 'Station ' + feature.get('network') +
                             '.' + feature.get('station') +
@@ -598,6 +657,20 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         modal.$scope.quakeml_id = feature.get("quakeml_id");
 
 
+                    }
+                    else if (detectFeatureType(feature) == "geojson") {
+                        category = feature.get('category');
+                        site = feature.get('site');
+                        name = feature.get('name');
+                        var modal = $modal({
+                            title: "",
+                            template: "./templates/geojson_modal.tpl.html",
+                            persist: false,
+                            show: true});
+                        // Set scope of modal.
+                        modal.$scope.category = category;
+                        modal.$scope.site = site;
+                        modal.$scope.name = name;
                     }
                     else {
                         net = feature.get('network');

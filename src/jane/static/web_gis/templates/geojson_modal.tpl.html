@@ -1,0 +1,33 @@
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-show="title">
+                <button type="button" class="close"
+                        ng-click="$hide()">&times;</button>
+                <h4 class="modal-title">Details for object {{title}}</h4>
+            </div>
+
+
+            <div class="modal-body" ng-controller="geojsonInfoController">
+                <div class="container-fluid">
+                    <div class="row">
+                        <dl class="dl-horizontal">
+                          <dt>Standort</dt>
+                          <dd>{{ site }}</dd>
+                          <dt>Kategorie</dt>
+                          <dd>{{ category }}</dd>
+                          <dt>Name</dt>
+                          <dd>{{ name }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        ng-click="$hide()">Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

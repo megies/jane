@@ -49,6 +49,7 @@
     <script src="./src/baynetapp.js"></script>
     <script src="./src/controllers/event_info_controller.js"></script>
     <script src="./src/controllers/station_info_controller.js"></script>
+    <script src="./src/controllers/geojson_info_controller.js"></script>
     <script src="./src/controllers/event_download_controller.js"></script>
     <script src="./src/main.js"></script>
     <script src="./src/directives/map.js"></script>
@@ -335,6 +336,28 @@
 
     </div>
 
+
+    <div class="sidebar-header">
+        <toggle-switch model="show_geojson_layer" class="switch-mini"
+                       on-label="An" off-label="Aus"
+                       style="position:absolute; margin-top:5px; margin-left: 5px">
+        </toggle-switch>
+        <span class="input-group-addon">
+            <i class="fa fa-object-ungroup"></i> Zusätzliche Objekte
+        </span>
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <small><i class="fa fa-search"></i> <b>Anzeigbare zusätzliche Objekte:
+                        {{ geojson_geojson.features.length }}</b>
+                </small>
+            </div>
+        </div>
+
+    </div>
 
     <div class="sidebar-header">
         <span class="input-group-addon">

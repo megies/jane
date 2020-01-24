@@ -260,6 +260,7 @@ INSTALLED_APPS += [
     'jane.documents',
     'jane.stationxml',
     'jane.quakeml',
+    'jane.geojson',
     'jane.fdsnws'
 ]
 
