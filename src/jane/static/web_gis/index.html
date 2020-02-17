@@ -350,12 +350,32 @@
     <div class="container-fluid">
 
         <div class="row">
+            <div class="col-md-4">
+                <label>
+                    <small>Kategorien</small>
+                </label>
+            </div>
+            <div class="col-md-8">
+                <button type="button" class="btn btn-default btn-xs"
+                        ng-model="geojson_settings.selected_categories"
+                        data-html="1" data-multiple="1"
+                        data-animation="am-flip-x"
+                        ng-options="label for label in geojson_settings.available_categories"
+                        bs-select>
+                    Action <span class="caret"></span>
+                </button>
+            </div>
+        </div>
+
+<!--
+        <div class="row">
             <div class="col-md-12">
                 <small><i class="fa fa-search"></i> <b>Anzeigbare zusätzliche Objekte:
                         {{ geojson_geojson.features.length }}</b>
                 </small>
             </div>
         </div>
+-->
 
     </div>
 

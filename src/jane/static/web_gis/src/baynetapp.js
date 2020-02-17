@@ -327,6 +327,8 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     };
 
     $scope.geojson_settings = {
+        "available_categories": [],
+        "selected_categories": [],
     };
 
     $scope.station_colors = {};
@@ -432,6 +434,15 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
 
 
     $scope.$watchCollection("geojson_geojson.features", function(f) {
+        // Get all available categories
+        var categories = _.uniq(_.map(f, function(i) {
+            return i.properties.category;
+        }));
+        categories.sort();
+
+        $scope.geojson_settings.selected_categories = categories;
+        $scope.geojson_settings.available_categories = categories;
+
         $scope.update_geojson_source(
             $scope.geojson_geojson,
             $scope.show_geojson_layer,

@@ -285,11 +285,12 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
             $scope.update_geojson_source = function(feature_collection, show_layer, geojson_settings) {
                 var geojson = {
                     "type": "FeatureCollection",
-                    // omit filtering for now
-                    "features": feature_collection.features,
-                    //"features": _.filter(feature_collection.features, function(i) {
-                    //    return true;
-                    //})
+                    "features": _.filter(feature_collection.features, function(i) {
+                        if (!_.contains(geojson_settings.selected_categories, i.properties.category)) {
+                            return false;
+                        }
+                        return true;
+                    })
                 };
                 if ($scope.geojson_layer) {
                     map.removeLayer($scope.geojson_layer);
