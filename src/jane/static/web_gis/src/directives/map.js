@@ -125,6 +125,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 }).value();
 
             $scope.baseLayerGroup = new ol.layer.Group({
+                zIndex: 0,
                 layers: _.values($scope.baseLayers)
             });
 
@@ -133,6 +134,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
 
             // Layer showing the outline of bavaria.
             var bavaria = new ol.layer.Vector({
+                zIndex: 1,
                 visible: $scope.show_bavaria_outline,
                 source: new ol.source.Vector({
                     url: 'bayern_topo.json',
@@ -301,6 +303,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 }
 
                 $scope.geojson_layer = new ol.layer.Vector({
+                    zIndex: 2,
                     source: new ol.source.Vector({
                         features: (new ol.format.GeoJSON()).readFeatures(geojson, {
                             // Data is in WGS84.
@@ -348,6 +351,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 };
 
                 $scope.station_layer = new ol.layer.Vector({
+                    zIndex: 4,
                     source: new ol.source.Vector({
                         features: (new ol.format.GeoJSON()).readFeatures(stations, {
                             // Data is in WGS84.
@@ -430,11 +434,13 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
 
                 if (show_points === false) {
                     $scope.event_layer = new ol.layer.Heatmap({
+                        zIndex: 3,
                         source: event_source
                     });
                 }
                 else {
                     $scope.event_layer = new ol.layer.Vector({
+                        zIndex: 3,
                         source: event_source,
                         style: get_style_function(event_settings)
                     });
