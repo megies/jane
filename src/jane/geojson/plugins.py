@@ -136,6 +136,7 @@ sites = [
     "Waldkraiburg",
     "Weilheim",
     "UNKNOWN",
+    "PUBLIC",
     ]
 categories = [
     "Bohransatzpunkt",
