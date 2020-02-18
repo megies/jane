@@ -282,9 +282,16 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 return styleFunction;
             };
 
-            $scope.geojson_layer = {};
+            $scope.geojson_layers = [];
 
             $scope.update_geojson_source = function(feature_collection, show_layer, geojson_settings) {
+                if ($scope.geojson_layers) {
+                    for (i in $scope.geojson_layers) { map.removeLayer($scope.geojson_layers[i]); }
+                    $scope.geojson_layers = [];
+                }
+                if (show_layer === false) {
+                    return;
+                }
                 var geojson = {
                     "type": "FeatureCollection",
                     "features": _.filter(feature_collection.features, function(i) {
@@ -294,29 +301,41 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         return true;
                     })
                 };
-                if ($scope.geojson_layer) {
-                    map.removeLayer($scope.geojson_layer);
-                    $scope.geojson_layer = {};
-                }
-                if (show_layer === false) {
-                    return;
-                }
 
-                $scope.geojson_layer = new ol.layer.Vector({
-                    zIndex: 2,
-                    source: new ol.source.Vector({
-                        features: (new ol.format.GeoJSON()).readFeatures(geojson, {
-                            // Data is in WGS84.
-                            dataProjection: "EPSG:4326",
-                            // Map has a spherical mercator projection.
-                            featureProjection: "EPSG:3857"
-                        })
-                    }),
-                    // rely on default style for now
-                    //style: get_style_function_stations(colors)
-                });
+                // create Layer group so we can control the zIndex of
+                // individual types of objects
+                var features = (new ol.format.GeoJSON()).readFeatures(geojson, {
+                    // Data is in WGS84.
+                    dataProjection: "EPSG:4326",
+                    // Map has a spherical mercator projection.
+                    featureProjection: "EPSG:3857"
+                })
+                $scope.geojson_layers = [];
 
-                map.addLayer($scope.geojson_layer);
+                // Control z-index (layer order) for geojson layers
+                // Map canvas is left free (since setting it to high negative didn't seem to
+                // work)
+                // Bavaria outline is 1, Events+Stations are hard coded where they are created
+                // as well
+                var geojson_zindex = {
+                    'Bewilligungsfeld': 2,
+                    'Stoerung': 4,
+                    'Bohrpfad': 5,
+                    'Bohransatzpunkt': 6,
+                    };
+                //for (category zIndex in geojson_zindex) {
+                for (category in geojson_zindex) {
+                    var features_current = features.filter(function(i) {return category == i.get("category");});
+                    if (features_current.length < 1) { continue; }
+                    $scope.geojson_layers.push(new ol.layer.Vector({
+                        zIndex: geojson_zindex[category],
+                        source: new ol.source.Vector({
+                            features: features_current}),
+                        // rely on default style for now
+                        //style: get_style_function_stations(colors)
+                    }));
+                }
+                for (i in $scope.geojson_layers) { map.addLayer($scope.geojson_layers[i]); }
             };
 
 
@@ -351,7 +370,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 };
 
                 $scope.station_layer = new ol.layer.Vector({
-                    zIndex: 4,
+                    zIndex: 11,
                     source: new ol.source.Vector({
                         features: (new ol.format.GeoJSON()).readFeatures(stations, {
                             // Data is in WGS84.
@@ -440,7 +459,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 }
                 else {
                     $scope.event_layer = new ol.layer.Vector({
-                        zIndex: 3,
+                        zIndex: 10,
                         source: event_source,
                         style: get_style_function(event_settings)
                     });
