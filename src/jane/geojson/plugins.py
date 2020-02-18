@@ -155,6 +155,54 @@ for category in categories:
                 permission_plugin_name, category=category, site=site_)
 
 
+class GeoJSONUnrecognizedRetrievePermissionPlugin(
+        RetrievePermissionPluginPoint):
+    """
+    If user does not have this permission, any geojson objects that are not of
+    one of the above categories or sites are filtered out. If a site name is
+    misspelled the object would otherwise be shown for all users which is not
+    desired.
+    """
+    name = 'geojson'
+
+    # Permission codename and name according to Django's nomenclature.
+    # XXX no idea if dots are allowed in codename, so replace them
+    permission_codename = 'can_see_geojson_unrecognized_objects'
+    permission_name = 'Can See GeoJSON Unrecognized objects'
+    title = permission_name + ' Permission'
+
+    def filter_queryset_user_has_permission(self, queryset, model_type,
+                                            user):
+        # If the user has the permission: don't restrict queryset.
+        return queryset
+
+    def filter_queryset_user_does_not_have_permission(self, queryset,
+                                                      model_type, user):
+        # model_type can be document or document index.
+        if model_type in ["document", "index"]:
+            # filter out any documents/indices for geojson of given
+            # category and at given site
+            # XXX handling of null values?
+            # queryset = queryset.exclude(json__site__isnull=True)
+            recognized_sites = set()
+            recognized_category = set()
+            # determine ids of items with recognized sites / categories
+            for site in sites:
+                for item in queryset.filter(json__site=site):
+                    recognized_sites.add(item.id)
+            for category in categories:
+                for item in queryset.filter(json__category=category):
+                    recognized_category.add(item.id)
+            # determine ids that have both a recognized site and a recognized
+            # category
+            recognized_items = recognized_sites & recognized_category
+            # now filter queryset so that only recognized items remain
+            queryset = queryset.filter(id__in=list(recognized_items))
+        else:
+            raise NotImplementedError()
+        return queryset
+
+
 class GeoJSONIndexerPlugin(IndexerPluginPoint):
     """
     Each document type can have one indexer.
