@@ -143,6 +143,7 @@ categories = [
     "Bohrpfad",
     "Stoerung",
     "Bewilligungsfeld",
+    "Gemeinden",
     ]
 
 # add all geojson site/category permission plugins

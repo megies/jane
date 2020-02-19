@@ -318,6 +318,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 // Bavaria outline is 1, Events+Stations are hard coded where they are created
                 // as well
                 var geojson_zindex = {
+                    'Gemeinden': 2,
                     'Bewilligungsfeld': 2,
                     'Stoerung': 4,
                     'Bohrpfad': 5,
