@@ -176,6 +176,71 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 map.getView().setRotation(new_value / 180.0 * Math.PI);
             });
 
+            var get_style_function_geojson = function(category) {
+                if (category == 'Gemeinden') {
+                    return function(feature, resolution) {
+                        return new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: '#000000',
+                                width: 1.4,
+                                //lineDash: [10, 20, 0, 20],
+                            })
+                        });
+                    }
+                }
+                else if (category == 'Bewilligungsfeld') {
+                    return function(feature, resolution) {
+                        return new ol.style.Style({
+                            fill: new ol.style.Fill({
+                                color: 'rgba(255, 204, 0, 0.3)'
+                            }),
+                            stroke: new ol.style.Stroke({
+                                color: 'rgba(153, 102, 0, 1)',
+                                width: 2.5,
+                            })
+                        });
+                    }
+                }
+                else if (category == 'Bohransatzpunkt') {
+                    return function(feature, resolution) {
+                        return new ol.style.Style({
+                            image: new ol.style.RegularShape({
+                                fill: new ol.style.Fill({
+                                    color: 'rgba(255, 255, 77, 1)'
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: 'rgba(0, 0, 0, 1)',
+                                    width: 1.5,
+                                }),
+                                radius: 10,
+                                points: 4,
+                                angle: 45 * (Math.PI / 180),
+                            }),
+                        });
+                    }
+                }
+                else if (category == 'Stoerung') {
+                    // encountered values: stoerverm, antitheter, antiverm,
+                    //     syntheter, synverm ("verm" for "vermutet")
+                    return function(feature, resolution) {
+                        var fault_type = feature.get('name');
+                        if (fault_type.includes('verm')) { var dash = [5, 5]; }
+                        else { var dash = undefined; }
+                        if (fault_type.includes('syn')) { var color = '#0000FF'; }
+                        else if (fault_type.includes('anti')) { var color = '#FF0000'; }
+                        else { var color = '#000000'; }
+                        return new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: color,
+                                width: 2,
+                                lineDash: dash,
+                            })
+                        });
+                    }
+                }
+                else { return undefined; }
+            }
+
             var get_style_function_stations = function(colors) {
                 var textStroke = new ol.style.Stroke({
                     color: '#444444',
@@ -319,10 +384,10 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 // as well
                 var geojson_zindex = {
                     'Gemeinden': 2,
-                    'Bewilligungsfeld': 2,
-                    'Stoerung': 4,
-                    'Bohrpfad': 5,
-                    'Bohransatzpunkt': 6,
+                    'Bewilligungsfeld': 3,
+                    'Stoerung': 5,
+                    'Bohrpfad': 6,
+                    'Bohransatzpunkt': 7,
                     };
                 //for (category zIndex in geojson_zindex) {
                 for (category in geojson_zindex) {
@@ -332,6 +397,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         zIndex: geojson_zindex[category],
                         source: new ol.source.Vector({
                             features: features_current}),
+                        style: get_style_function_geojson(category),
                         // rely on default style for now
                         //style: get_style_function_stations(colors)
                     }));
@@ -454,7 +520,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
 
                 if (show_points === false) {
                     $scope.event_layer = new ol.layer.Heatmap({
-                        zIndex: 3,
+                        zIndex: 4,
                         source: event_source
                     });
                 }
