@@ -259,6 +259,8 @@ module.factory('stations', function($http, $log, jane_server) {
 module.controller("BayNetController", function($scope, $log, stations, station_colors,
                                                events, event_agency_colors,
                                                event_site_colors, current_user, geojson) {
+    // overall status when all rest data grabs are completed
+    $scope.all_rest_data_loaded = false;
 
     current_user.success(function (data) {
         $scope.current_user = data.username;
@@ -335,6 +337,20 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     };
 
     $scope.station_colors = {};
+
+    // set overall loading status if all rest data grabs are finished
+    $scope.$watchCollection('[geojson_events.features, geojson_stations.features, geojson_geojson.features]', function(newValues) {
+        if ($scope.geojson_events.features == null) {
+            $scope.all_rest_data_loaded = false;
+        }
+        else if ($scope.geojson_stations.features == null) {
+            $scope.all_rest_data_loaded = false;
+        }
+        else if ($scope.geojson_geojson.features == null) {
+            $scope.all_rest_data_loaded = false;
+        }
+        else { $scope.all_rest_data_loaded = true; }
+    });
 
     $scope.$watchCollection("geojson_events.features", function(f) {
         // Get all unique agencies.
