@@ -84,7 +84,9 @@
                        style="position:absolute; margin-top:5px; margin-left: 5px">
         </toggle-switch>
         <span class="input-group-addon">
-            <i class="fa fa-dot-circle-o"></i> Erdbeben
+            <span ng-if="geojson_events.features == null"><i class="fa fa-spinner fa-spin"></i></span>
+            <span ng-if="geojson_events.features != null"><i class="fa fa-dot-circle-o"></i></span>
+            Erdbeben
             <!--NEEDS DIFFERENT WAY TO LAYOUT!-->
             <toggle-switch model="event_layer_show_points"
                            class="switch-mini switch-default"
@@ -272,7 +274,9 @@
                        style="position:absolute; margin-top:5px; margin-left: 5px">
         </toggle-switch>
         <span class="input-group-addon">
-            <i class="fa fa-map-marker"></i> Stationen
+            <span ng-if="geojson_stations.features == null"><i class="fa fa-spinner fa-spin"></i></span>
+            <span ng-if="geojson_stations.features != null"><i class="fa fa-map-marker"></i></span>
+            Stationen
         </span>
     </div>
 
@@ -337,7 +341,9 @@
                        style="position:absolute; margin-top:5px; margin-left: 5px">
         </toggle-switch>
         <span class="input-group-addon">
-            <i class="fa fa-object-ungroup"></i> Zusätzliche Objekte
+            <span ng-if="geojson_geojson.features == null"><i class="fa fa-spinner fa-spin"></i></span>
+            <span ng-if="geojson_geojson.features != null"><i class="fa fa-object-ungroup"></i></span>
+            Zusätzliche Objekte
         </span>
     </div>
 

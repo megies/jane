@@ -66,7 +66,7 @@ module.factory('geojson', function($http, $log, jane_server) {
     return {
         geojson: {
             "type": "FeatureCollection",
-            "features": []
+            "features": null,
         },
         update: function() {
             var self = this;
@@ -84,6 +84,7 @@ module.factory('geojson', function($http, $log, jane_server) {
                         return geojson;
                     }).value();
                 // Update the event set.
+                self.geojson.features = [];
                 self.geojson.features.length = 0;
                 _.forEach(data, function(i) {
                     self.geojson.features.push(i);
@@ -99,7 +100,7 @@ module.factory('events', function($http, $log, jane_server) {
     return {
         events: {
             "type": "FeatureCollection",
-            "features": []
+            "features": null,
         },
         update: function() {
             var self = this;
@@ -142,6 +143,7 @@ module.factory('events', function($http, $log, jane_server) {
                         return geojson;
                     }).value();
                 // Update the event set.
+                self.events.features = [];
                 self.events.features.length = 0;
                 _.forEach(data, function(i) {
                     self.events.features.push(i);
@@ -156,7 +158,7 @@ module.factory('stations', function($http, $log, jane_server) {
     return {
         stations: {
             "type": "FeatureCollection",
-            "features": []
+            "features": null,
         },
         update: function() {
             var self = this;
@@ -228,6 +230,7 @@ module.factory('stations', function($http, $log, jane_server) {
                 });
 
                 // Update the stations set.
+                self.stations.features = [];
                 self.stations.features.length = 0;
                 _.forEach(stations, function(i) {
                     self.stations.features.push(i);
