@@ -238,6 +238,21 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         });
                     }
                 }
+                else if (category == 'Bohrpfad') {
+                    // "name" will contain "Injektion" or "Produktion"
+                    return function(feature, resolution) {
+                        var well_type = feature.get('name');
+                        if (well_type.includes('Injektion')) { var color = '#0000FF'; }
+                        else if (well_type.includes('Produktion')) { var color = '#FF0000'; }
+                        else { var color = '#804000'; }
+                        return new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: color,
+                                width: 3,
+                            })
+                        });
+                    }
+                }
                 else { return undefined; }
             }
 
