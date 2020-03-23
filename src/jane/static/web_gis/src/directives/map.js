@@ -226,8 +226,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         var fault_type = feature.get('name');
                         if (fault_type.includes('verm')) { var dash = [5, 5]; }
                         else { var dash = undefined; }
-                        if (fault_type.includes('syn')) { var color = '#0000FF'; }
-                        else if (fault_type.includes('anti')) { var color = '#FF0000'; }
+                        if (fault_type.includes('syn')) { var color = '#009933'; }
+                        else if (fault_type.includes('anti')) { var color = '#cc00cc'; }
                         else { var color = '#000000'; }
                         return new ol.style.Style({
                             stroke: new ol.style.Stroke({
