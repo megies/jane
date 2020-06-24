@@ -84,7 +84,9 @@
                        style="position:absolute; margin-top:5px; margin-left: 5px">
         </toggle-switch>
         <span class="input-group-addon">
-            <i class="fa fa-dot-circle-o"></i> Earthquakes
+            <span ng-if="geojson_events.features == null"><i class="fa fa-spinner fa-spin"></i></span>
+            <span ng-if="geojson_events.features != null"><i class="fa fa-dot-circle-o"></i></span>
+            Earthquakes
             <!--NEEDS DIFFERENT WAY TO LAYOUT!-->
             <toggle-switch model="event_layer_show_points"
                            class="switch-mini switch-default"
@@ -206,7 +208,8 @@
             <div class="col-md-12" style="padding-top:5px">
                 <small>
                     <center>Total Events in Catalog:
-                    {{ geojson_events.features.length }}
+                       <span ng-if="geojson_events.features == null">Loading...</span>
+                       <span ng-if="geojson_events.features != null">{{ geojson_events.features.length }}</span>
                     </center>
                 </small>
             </div>

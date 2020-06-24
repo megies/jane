@@ -53,7 +53,7 @@ module.factory('events', function($http, $log, jane_server) {
     return {
         events: {
             "type": "FeatureCollection",
-            "features": []
+            "features": null,
         },
         update: function() {
             var self = this;
@@ -95,6 +95,7 @@ module.factory('events', function($http, $log, jane_server) {
                         };
                     }).value();
                 // Update the event set.
+                self.events.features = [];
                 self.events.features.length = 0;
                 _.forEach(data, function(i) {
                     self.events.features.push(i);
