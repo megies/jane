@@ -335,8 +335,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             (i.properties.origin_time > event_settings.max_date) ||
                             (i.properties.magnitude < event_settings.magnitude_range[0]) ||
                             (i.properties.magnitude > event_settings.magnitude_range[1]) ||
-                            (i.properties.depth_in_km < event_settings.depth_range[0]) ||
-                            (i.properties.depth_in_km > event_settings.depth_range[1]) ||
+                            ((i.properties.depth_in_m / 1000.0) < event_settings.depth_range[0]) ||
+                            ((i.properties.depth_in_m / 1000.0) > event_settings.depth_range[1]) ||
                             !_.contains(event_settings.selected_agencies, i.properties.agency)) {
                             return false;
                         }
