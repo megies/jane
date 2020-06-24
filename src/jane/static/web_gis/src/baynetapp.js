@@ -57,7 +57,7 @@ module.factory('events', function($http, $log, jane_server) {
         },
         update: function() {
             var self = this;
-            var url = jane_server + "/rest/document_indices/quakeml?limit=20000";
+            var url = jane_server + "/rest/document_indices/quakeml?limit=60000";
             $http.get(url).success(function(data) {
                 // Filter events to only keep those with a valid origin and
                 // magnitude.
