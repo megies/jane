@@ -326,7 +326,7 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     };
 
     $scope.station_settings = {
-        "min_date": new Date("2000-01-01"),
+        "min_date": new Date(),
         "max_date": currentDate,
         "grey_out_inactive_stations": true
     };
