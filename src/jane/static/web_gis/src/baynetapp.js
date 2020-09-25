@@ -45,15 +45,14 @@ module.constant('event_site_colors', [
 
 
 module.constant('station_colors', [
-    'rgba(0, 0, 255, 1.0)',
-    '#ff7f00',
-    '#1f78b4',
-    '#a6cee3',
-    '#33a02c',
-    '#ff0000',
-    '#e31a1c',
-    '#fb9a99',
-    '#fdbf6f']);
+    '#0099ff', // BW blue
+    '#e41a1c', // GR red
+    '#ff7f00', // XG orange
+    '#4daf4a', // green
+    '#984ea3', // purple
+    '#ffff33', // yellow
+    '#a65628', // brown
+    '#f781bf']); // pink
 
 
 module.factory('current_user', function ($http) {
