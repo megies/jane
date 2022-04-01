@@ -783,6 +783,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                     else {
                         net = feature.get('network');
                         sta = feature.get('station');
+                        lat = feature.get('latitude');
+                        lon = feature.get('longitude');
                         var modal = $modal({
                             title: "Station " + net + "." + sta,
                             template: "./templates/station_modal.tpl.html",
@@ -791,6 +793,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         // Set scope of modal.
                         modal.$scope.network = net;
                         modal.$scope.station = sta;
+                        modal.$scope.latitude = lat;
+                        modal.$scope.longitude = lon;
                     }
                 }
             };

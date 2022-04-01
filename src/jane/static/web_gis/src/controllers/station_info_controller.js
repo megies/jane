@@ -5,7 +5,9 @@ baynetApp.controller('stationInfoController', function ($scope, $log, stations) 
     for (var i = 0; i < stations.stations.features.length; i++) {
         var j = stations.stations.features[i];
         if (j.properties.network !== $scope.network ||
-            j.properties.station != $scope.station) {
+            j.properties.station !== $scope.station ||
+            j.properties.longitude !== $scope.longitude ||
+            j.properties.latitude !== $scope.latitude) {
             continue;
         }
         $scope.station_object = j;

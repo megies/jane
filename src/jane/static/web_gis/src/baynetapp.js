@@ -166,7 +166,7 @@ module.factory('stations', function($http, $log, jane_server) {
                 var stations = {};
                 _.forEach(data.results, function(item) {
                     var j = item.indexed_data;
-                    var station_id = [j.network, j.station];
+                    var station_id = [j.network, j.station, j.longitude, j.latitude];
 
                     // Start- and end dates for the current channel.
                     var n_sd = new Date(j.start_date);
