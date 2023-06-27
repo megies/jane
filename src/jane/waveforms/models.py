@@ -40,7 +40,8 @@ class Path(models.Model):
 
 
 class File(models.Model):
-    path = models.ForeignKey(Path, related_name='files')
+    path = models.ForeignKey(
+        Path, related_name='files', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, db_index=True)
     size = models.IntegerField()
     gaps = models.IntegerField(default=0, db_index=True)
@@ -71,7 +72,8 @@ class File(models.Model):
 
 
 class ContinuousTrace(models.Model):
-    file = models.ForeignKey(File, related_name='traces')
+    file = models.ForeignKey(
+        File, related_name='traces', on_delete=models.CASCADE)
     pos = models.IntegerField(default=0)
     network = models.CharField(max_length=2, db_index=True, blank=True)
     station = models.CharField(max_length=5, db_index=True, blank=True)
@@ -198,10 +200,12 @@ class Mapping(models.Model):
         max_length=255, blank=False, default=r"^.*$")
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     created_by = models.ForeignKey(User, null=True, editable=False,
-                                   related_name='mappings_created')
+                                   related_name='mappings_created',
+                                   on_delete=models.CASCADE)
     modified_at = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, null=True, editable=False,
-                                    related_name='mappings_modified')
+                                    related_name='mappings_modified',
+                                    on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s.%s.%s.%s | %s ==> %s.%s.%s.%s" % (
@@ -249,10 +253,12 @@ class Restriction(models.Model):
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     created_by = models.ForeignKey(User, null=True, editable=False,
-                                   related_name='restrictions_created')
+                                   related_name='restrictions_created',
+                                   on_delete=models.CASCADE)
     modified_at = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, null=True, editable=False,
-                                    related_name='restrictions_modified')
+                                    related_name='restrictions_modified',
+                                    on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         # ensure uppercase and no whitespaces around network/station ids

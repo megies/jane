@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('sha1', models.CharField(unique=True, db_index=True, max_length=40, editable=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
-                ('created_by', models.ForeignKey(related_name='documents_created', to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(related_name='documents_created', on_delete=models.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'Document',
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('json', jsonb.JSONField(verbose_name='JSON')),
                 ('geometry', django.contrib.gis.db.models.fields.GeometryCollectionField(srid=4326, geography=True, blank=True, null=True)),
-                ('document', models.ForeignKey(related_name='indices', to='documents.Document')),
+                ('document', models.ForeignKey(related_name='indices', to='documents.Document', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Index',
@@ -58,9 +58,9 @@ class Migration(migrations.Migration):
                 ('data', models.BinaryField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
-                ('created_by', models.ForeignKey(related_name='attachments_created', to=settings.AUTH_USER_MODEL)),
-                ('index', models.ForeignKey(related_name='attachments', to='documents.DocumentIndex')),
-                ('modified_by', models.ForeignKey(related_name='attachments_modified', to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(related_name='attachments_created', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('index', models.ForeignKey(related_name='attachments', to='documents.DocumentIndex', on_delete=models.CASCADE)),
+                ('modified_by', models.ForeignKey(related_name='attachments_modified', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Attachment',
@@ -87,12 +87,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='document',
             name='document_type',
-            field=models.ForeignKey(related_name='documents', to='documents.DocumentType'),
+            field=models.ForeignKey(related_name='documents', to='documents.DocumentType', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='document',
             name='modified_by',
-            field=models.ForeignKey(related_name='documents_modified', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='documents_modified', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='document',
