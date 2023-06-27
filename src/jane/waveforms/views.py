@@ -3,7 +3,7 @@ import os
 
 from rest_framework import viewsets, renderers, filters
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 
 from jane.waveforms import models, serializer
 
@@ -48,12 +48,12 @@ class WaveformView(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = '__all__'
 
-    @detail_route(renderer_classes=[PNGRenderer])
+    @action(detail=True, renderer_classes=[PNGRenderer])
     def plot(self, request, *args, **kwargs):
         obj = self.get_object()
         return Response(obj.preview_image)
 
-    @detail_route(renderer_classes=[BinaryRenderer])
+    @action(detail=True, renderer_classes=[BinaryRenderer])
     def file(self, request, *args, **kwargs):
         file_obj = self.get_object().file
         filename = os.path.join(file_obj.path.name, file_obj.name)
