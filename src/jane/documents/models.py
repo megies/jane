@@ -22,13 +22,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.db import models
 from django.contrib.gis.measure import Distance
 from django.contrib.postgres.fields import jsonb
-from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.models.aggregates import Count
 from django.db.models.expressions import OrderBy, RawSQL
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import filesizeformat
+from django.urls import reverse
 from djangoplugins.fields import PluginField, ManyPluginField
 from obspy.core.utcdatetime import UTCDateTime
 from rest_framework import status
