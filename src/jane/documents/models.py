@@ -268,7 +268,7 @@ class Document(models.Model):
         signals.index_document(sender=None, instance=self, created=None)
 
 
-class DocumentIndexManager(models.GeoManager):
+class DocumentIndexManager(models.Manager):
     """
     Custom queryset manager for the document indices.
     """
