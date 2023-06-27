@@ -10,7 +10,8 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/',
+        include(admin.site.urls[:2], namespace=admin.site.urls[2])),
     url(r'', include('jane.waveforms.urls')),
     url(r'', include('jane.documents.urls')),
     url(r'', include('jane.jane.urls')),
