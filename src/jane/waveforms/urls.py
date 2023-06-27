@@ -6,7 +6,7 @@ from jane.waveforms import views
 
 
 router = OptionalTrailingSlashSimpleRouter(trailing_slash=False)
-router.register(r'waveforms', views.WaveformView, base_name='rest_waveforms')
+router.register(r'waveforms', views.WaveformView, basename='rest_waveforms')
 
 urlpatterns = [
     url(r'^rest/', include(router.urls)),
