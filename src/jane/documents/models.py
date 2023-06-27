@@ -170,7 +170,8 @@ class Document(models.Model):
     any type that is described by indices.
     """
     # The type of the document. Depends on the available Jane plug-ins.
-    document_type = models.ForeignKey(DocumentType, related_name='documents')
+    document_type = models.ForeignKey(DocumentType, related_name='documents',
+                                      on_delete=models.CASCADE)
     # The name of that particular document. Oftentimes the filename. Unique
     # together with the document type to enable a nice REST API.
     name = models.CharField(max_length=255, db_index=True)
@@ -188,9 +189,11 @@ class Document(models.Model):
     modified_at = models.DateTimeField(auto_now=True, editable=False)
     # Users responsible for the aforementioned actions.
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                   related_name='documents_created')
+                                   related_name='documents_created',
+                                   on_delete=models.CASCADE)
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                    related_name='documents_modified')
+                                    related_name='documents_modified',
+                                    on_delete=models.CASCADE)
     objects = DocumentManager()
 
     class Meta:
@@ -505,7 +508,8 @@ class DocumentIndex(models.Model):
     """
     Indexed values for a specific document.
     """
-    document = models.ForeignKey(Document, related_name='indices')
+    document = models.ForeignKey(Document, related_name='indices',
+                                 on_delete=models.CASCADE)
     json = jsonb.JSONField(verbose_name="JSON")
     geometry = models.GeometryCollectionField(blank=True, null=True,
                                               geography=True)
@@ -661,7 +665,8 @@ class DocumentIndexAttachment(models.Model):
     """
     Attachments for one Document.
     """
-    index = models.ForeignKey(DocumentIndex, related_name='attachments')
+    index = models.ForeignKey(DocumentIndex, related_name='attachments',
+                              on_delete=models.CASCADE)
     category = models.CharField(max_length=50, db_index=True)
     content_type = models.CharField(max_length=255)
     station = models.ForeignKey(Document,
@@ -676,9 +681,11 @@ class DocumentIndexAttachment(models.Model):
     modified_at = models.DateTimeField(auto_now=True, editable=False)
     # Users responsible for the aforementioned actions.
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                   related_name='attachments_created')
+                                   related_name='attachments_created',
+                                   on_delete=models.CASCADE)
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                    related_name='attachments_modified')
+                                    related_name='attachments_modified',
+                                    on_delete=models.CASCADE)
     objects = DocumentIndexAttachmentManager()
 
     class Meta:
