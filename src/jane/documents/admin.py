@@ -4,8 +4,8 @@ import base64
 
 from django.conf.urls import url
 from django.contrib.gis import admin
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.urls import reverse
 
 from jane.documents import models
 
