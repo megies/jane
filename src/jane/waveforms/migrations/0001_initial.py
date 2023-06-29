@@ -6,6 +6,8 @@ import django.contrib.postgres.fields.ranges
 import django.contrib.postgres.fields
 from django.conf import settings
 
+from jane.waveforms.models import validate_name
+
 
 class Migration(migrations.Migration):
 
@@ -79,7 +81,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Path',
             fields=[
-                ('name', models.CharField(max_length=255, validators=['validate_name'], serialize=False, primary_key=True)),
+                ('name', models.CharField(max_length=255, validators=[validate_name], serialize=False, primary_key=True)),
                 ('ctime', models.DateTimeField()),
                 ('mtime', models.DateTimeField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
