@@ -15,7 +15,9 @@ def determine_station(apps, schema_editor):
     rlas = None
     romy = None
 
-    for document in documents.objects.all():
+    queryset = documents.objects.all()
+
+    for document in queryset:
         if document.document_type.name == 'stationxml':
             if document.name == 'dataless.seed.BW_RLAS.xml':
                 rlas = document
@@ -26,11 +28,14 @@ def determine_station(apps, schema_editor):
             else:
                 raise ValueError("Found unknown station: {0}".format(document.name))
 
-    if rlas is None:
-        raise ValueError("Could not find index for RLAS")
+    # this check does not apply if setting up a jane from scratch when no
+    # documents are in the database
+    if len(queryset):
+        if rlas is None:
+            raise ValueError("Could not find index for RLAS")
 
-    if romy is None:
-        raise ValueError("Could not find index for ROMY")
+        if romy is None:
+            raise ValueError("Could not find index for ROMY")
 
     print("Migrating attachments...")
 
