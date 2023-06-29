@@ -156,7 +156,7 @@ def query(request):
         return _error(request, msg)
     longestonly = bool(longestonly)
     # user
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = request.user
     else:
         user = None
