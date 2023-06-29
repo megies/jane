@@ -250,7 +250,7 @@ def query(request):
     url = request.build_absolute_uri(request.get_full_path())
 
     # user
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = request.user
     else:
         user = None
