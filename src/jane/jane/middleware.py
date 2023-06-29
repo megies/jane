@@ -13,7 +13,7 @@ class AutoLogoutMiddleware(object):
         set_last_touch = True
 
         # can't log out if not logged in
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             # do nothing
             set_last_touch = False
         # check if auto logout is activated
