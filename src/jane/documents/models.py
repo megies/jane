@@ -21,8 +21,8 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.db import models
 from django.contrib.gis.measure import Distance
-from django.contrib.postgres.fields import jsonb
 from django.db import connection
+from django.db.models import JSONField
 from django.db.models.aggregates import Count
 from django.db.models.expressions import OrderBy, RawSQL
 from django.http import Http404
@@ -510,7 +510,7 @@ class DocumentIndex(models.Model):
     """
     document = models.ForeignKey(Document, related_name='indices',
                                  on_delete=models.CASCADE)
-    json = jsonb.JSONField(verbose_name="JSON")
+    json = JSONField(verbose_name="JSON")
     geometry = models.GeometryCollectionField(blank=True, null=True,
                                               geography=True)
     stations = models.ManyToManyField(Document, through='DocumentIndexAttachment')
