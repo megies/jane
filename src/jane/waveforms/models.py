@@ -13,9 +13,16 @@ from jane.waveforms.utils import to_datetime
 User = settings.AUTH_USER_MODEL
 
 
+def validate_name(value):
+    if not os.path.isdir(value):
+        raise ValidationError(u'%s is not a valid path' % value)
+    if not os.path.isabs(value):
+        raise ValidationError(u'%s is not a absolute path' % value)
+
+
 class Path(models.Model):
     name = models.CharField(max_length=255, primary_key=True,
-                            validators=['validate_name'])
+                            validators=[validate_name])
     ctime = models.DateTimeField()
     mtime = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -25,12 +32,6 @@ class Path(models.Model):
 
     class Meta:
         ordering = ['name']
-
-    def validate_name(self, value):
-        if not os.path.isdir(value):
-            raise ValidationError(u'%s is not a valid path' % value)
-        if not os.path.isabs(value):
-            raise ValidationError(u'%s is not a absolute path' % value)
 
     def save(self, *args, **kwargs):
         stats = os.stat(self.name)
