@@ -1,9 +1,10 @@
 site_name: Jane
 repo_url: https://github.com/krischer/jane/
 use_directory_urls: false
-theme: cosmo
+theme:
+  name: mkdocs
 copyright: Jane Developers, 2014-2016
-pages:
+nav:
 - 'Home': 'index.md'
 - 'Introduction': 'introduction.md'
 - 'Details':
