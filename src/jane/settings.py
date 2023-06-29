@@ -19,6 +19,15 @@ else:
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
+# new in django 3.2 (?), creates warnings if not set anywhere
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+# this is old behavior of having int32 as automatic primary key fields. Other
+# option could be "BigAutoField" which is int64 but that would need a migration
+# (at least if changed on an existing project)
+# also see https://dev.to/weplayinternet/upgrading-to-django-3-2-and-fixing-defaultautofield-warnings-518n
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['*']
