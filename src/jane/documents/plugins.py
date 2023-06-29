@@ -171,9 +171,9 @@ def initialize_plugins():
                 indexer=indexer)
             resource_type.save()
 
-        resource_type.validators = validators
-        resource_type.retrieve_permissions = retrieve_permissions
-        resource_type.upload_permissions = upload_permissions
+        resource_type.validators.set(validators)
+        resource_type.retrieve_permissions.set(retrieve_permissions)
+        resource_type.upload_permissions.set(upload_permissions)
         resource_type.save()
 
     # Permissions.
