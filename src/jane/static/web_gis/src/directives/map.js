@@ -36,19 +36,18 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
             // The base layers are treated as a group. Only one can be active
             // at any given time and they share their opacity setting.
             $scope.baseLayers = {
-                "Stamen Toner-Lite": new ol.layer.Tile({
-                    visible: true,
-                    source: new ol.source.Stamen({layer: 'toner-lite'})
-                }),
-               
-                "Stamen Toner": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'toner'})
-                }),
-                "Stamen Watercolor": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'watercolor'})
-                }),
+                //"Stamen Toner-Lite": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'toner-lite'})
+                //}),
+                //"Stamen Toner": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'toner'})
+                //}),
+                //"Stamen Watercolor": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'watercolor'})
+                //}),
                 // "MapQuest (Street)": new ol.layer.Tile({
                 //     visible: false,
                 //     source: new ol.source.MapQuest({layer: 'osm'})
@@ -58,7 +57,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                 //     source: new ol.source.MapQuest({layer: 'sat'})
                 // }),
                 "OpenTopoMap": new ol.layer.Tile({
-                    visible: false,
+                    visible: true,
                     source: new ol.source.OSM({
                         url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
                         crossOrigin: null})
