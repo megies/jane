@@ -43,26 +43,26 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         crossOrigin: null
                     })
                 }),
-                "Stamen Toner-Lite": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'toner-lite'})
-                }),
-                "Stamen Toner": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'toner'})
-                }),
-                "Stamen Watercolor": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'watercolor'})
-                }),
-                "MapQuest (Street)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.MapQuest({layer: 'osm'})
-                }),
-                "MapQuest (Satellite)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.MapQuest({layer: 'sat'})
-                }),
+                //"Stamen Toner-Lite": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'toner-lite'})
+                //}),
+                //"Stamen Toner": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'toner'})
+                //}),
+                //"Stamen Watercolor": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.Stamen({layer: 'watercolor'})
+                //}),
+                //"MapQuest (Street)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.MapQuest({layer: 'osm'})
+                //}),
+                //"MapQuest (Satellite)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.MapQuest({layer: 'sat'})
+                //}),
                 "Open Street Map": new ol.layer.Tile({
                     visible: false,
                     source: new ol.source.OSM()
@@ -73,35 +73,35 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         url: '//{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
                         crossOrigin: null
                     })
-                }),
-                "OSM EU TOPO (4umaps.eu)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.OSM({
-                        url: '//4umaps.eu/{z}/{x}/{y}.png',
-                        crossOrigin: null
-                    })
-                }),
-                "Bing (Road)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'Road'
-                    })
-                }),
-                "Bing (Aerial)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'Aerial'
-                    })
-                }),
-                "Bing (Aerial with Labels)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'AerialWithLabels'
-                    })
                 })
+                //"OSM EU TOPO (4umaps.eu)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.OSM({
+                //        url: '//4umaps.eu/{z}/{x}/{y}.png',
+                //        crossOrigin: null
+                //    })
+                //}),
+                //"Bing (Road)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.BingMaps({
+                //        key: bing_key,
+                //        imagerySet: 'Road'
+                //    })
+                //}),
+                //"Bing (Aerial)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.BingMaps({
+                //        key: bing_key,
+                //        imagerySet: 'Aerial'
+                //    })
+                //}),
+                //"Bing (Aerial with Labels)": new ol.layer.Tile({
+                //    visible: false,
+                //    source: new ol.source.BingMaps({
+                //        key: bing_key,
+                //        imagerySet: 'AerialWithLabels'
+                //    })
+                //})
             };
 
             $scope.change_base_layer = function(layer_name) {
