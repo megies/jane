@@ -241,10 +241,10 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                     // Smallest possible value is 0.5.
                     // magnitude = parseFloat(feature.get('magnitude'));
                     // radius = Math.max(((magnitude + 3.0) / 11) * 29.0 + 1, 0.5);
-                    // Scale events from 3 to 10 from 1 to 10.0 pixel.
-                    // Smallest possible value is 0.5.
+                    // Scale events from 3 to 10 from 10 to 40.0 pixel.
+                    // Smallest possible value is 5.5.
                     magnitude = parseFloat(feature.get('magnitude'));
-                    radius = Math.max(((magnitude - 3.0) / 7) * 9.0 + 0.5, 0.5);
+                    radius = Math.sqrt(Math.max(((magnitude - 3.0) / 7) * 350.0, 20.0));
                     tag = radius;
                     
 
