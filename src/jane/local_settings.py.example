@@ -93,6 +93,8 @@ JANE_ACCENT_COLOR = "#D9230F"
 JANE_FDSN_STATIONXML_SENDER = "Jane"
 JANE_FDSN_STATIONXML_SOURCE = "Jane"
 
+# optionally set a custom logfile destination, overriding the default value from settings.py
+#LOGFILE = '/home/sysop/logs/jane-rotational.log'
 
 # Change the settings for the test database here!
 # for pytest-django, this did not work for me:
