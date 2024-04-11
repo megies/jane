@@ -361,6 +361,10 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                                 min_pcc = Math.min(i.properties.romy_pcc, min_pcc);
                                 max_pcc = Math.max(i.properties.romy_pcc, max_pcc);
                             }
+                            if (typeof i.properties.bspf_pcc !== 'undefined') {
+                                min_pcc = Math.min(i.properties.bspf_pcc, min_pcc);
+                                max_pcc = Math.max(i.properties.bspf_pcc, max_pcc);
+                            }
                         }
                         else if ($scope.stations[event_settings.selected_station].indexOf('BW.ROMY') !== -1) { // ROMY
                             min_pcc = i.properties.romy_pcc;
@@ -369,6 +373,10 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         else if ($scope.stations[event_settings.selected_station].indexOf('BW.RLAS') !== -1) { // RLAS
                             min_pcc = i.properties.rlas_pcc;
                             max_pcc = i.properties.rlas_pcc;
+                        }
+                        else if ($scope.stations[event_settings.selected_station].indexOf('PY.BSPF') !== -1) { // BSPF
+                            min_pcc = i.properties.bspf_pcc;
+                            max_pcc = i.properties.bspf_pcc;
                         }
 
                         // Hide events that do not fall within the selected correlation range.

@@ -14,6 +14,7 @@ def determine_station(apps, schema_editor):
     documents = apps.get_model('documents', 'Document')
     rlas = None
     romy = None
+    bspf = None
 
     queryset = documents.objects.all()
 
@@ -25,6 +26,9 @@ def determine_station(apps, schema_editor):
             elif document.name == 'dataless.seed.BW_ROMY.xml':
                 romy = document
                 print("Found ROMY")
+            elif document.name == 'BSPF.xml':
+                bspf = document
+                print("Found BSPF")
             else:
                 raise ValueError("Found unknown station: {0}".format(document.name))
 
@@ -33,9 +37,10 @@ def determine_station(apps, schema_editor):
     if len(queryset):
         if rlas is None:
             raise ValueError("Could not find index for RLAS")
-
         if romy is None:
             raise ValueError("Could not find index for ROMY")
+        if bspf is None:
+            raise ValueError("Could not find index for BSPF")
 
     print("Migrating attachments...")
 
@@ -46,6 +51,7 @@ def determine_station(apps, schema_editor):
     # More recently processed results explicitly contain the station name
     attachments.objects.filter(category__endswith='(RLAS)').update(station=rlas)
     attachments.objects.filter(category__endswith='(ROMY)').update(station=romy)
+    attachments.objects.filter(category__endswith='(BSPF)').update(station=bspf)
 
     # Older processed results do not contain the station name
     # We assume they are all from RLAS

@@ -349,6 +349,8 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
                 name += ' (Fürstenfeldbruck)';
             else if (prop.station === 'RLAS')
                 name += ' (Wettzell)';
+            else if (prop.station === 'BSPF')
+                name += ' (Pinon Flat)';
 
             $scope.stations[id] = name;
         }

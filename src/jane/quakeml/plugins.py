@@ -121,6 +121,7 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
         "has_moment_tensor": "bool",
         "rlas_pcc": "float",
         "romy_pcc": "float",
+        "bspf_pcc": "float",
         # "rotational_parameters": "dict",
     }
 
@@ -224,6 +225,7 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
                 "has_moment_tensor": has_moment_tensor,
                 "rlas_pcc": rotational_parameters['RLAS']['pcc'] if 'RLAS' in rotational_parameters else None,
                 "romy_pcc": rotational_parameters['ROMY']['pcc'] if 'ROMY' in rotational_parameters else None,
+                "bspf_pcc": rotational_parameters['BSPF']['pcc'] if 'BSPF' in rotational_parameters else None,
                 # "rotational_parameters": rotational_parameters,
                 # The special key geometry can be used to store geographic
                 # information about the indexes geometry. Useful for very
