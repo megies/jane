@@ -225,7 +225,7 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
     };
 
     $scope.rotation = 0;
-    $scope.base_layer_opacity = 100.0;
+    $scope.base_layer_opacity = 60.0;
 
     // $scope.show_bavaria_outline = false;
 
