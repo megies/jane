@@ -222,8 +222,8 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
                 event.event_type.capitalize() if event.event_type else None,
                 "has_focal_mechanism": has_focal_mechanism,
                 "has_moment_tensor": has_moment_tensor,
-                "rlas_pcc": rotational_parameters['RLAS']['pcc'],
-                "romy_pcc": rotational_parameters['ROMY']['pcc'],
+                "rlas_pcc": rotational_parameters['RLAS']['pcc'] if 'RLAS' in rotational_parameters else None,
+                "romy_pcc": rotational_parameters['ROMY']['pcc'] if 'ROMY' in rotational_parameters else None,
                 # "rotational_parameters": rotational_parameters,
                 # The special key geometry can be used to store geographic
                 # information about the indexes geometry. Useful for very
