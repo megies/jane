@@ -336,8 +336,7 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                             (i.properties.magnitude < event_settings.magnitude_range[0]) ||
                             (i.properties.magnitude > event_settings.magnitude_range[1]) ||
                             ((i.properties.depth_in_m / 1000.0) < event_settings.depth_range[0]) ||
-                            ((i.properties.depth_in_m / 1000.0) > event_settings.depth_range[1]) ||
-                            !_.contains(event_settings.selected_agencies, i.properties.agency)) {
+                            ((i.properties.depth_in_m / 1000.0) > event_settings.depth_range[1])) {
                             return false;
                         }
 
@@ -376,30 +375,6 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                         if ((max_pcc < event_settings.correlation_range[0]) ||
                             (min_pcc > event_settings.correlation_range[1])) {
                             return false;
-                        }
-
-                        // Author might not always be given.
-                        if (!_.has(i.properties, "author") && !i.properties.author) {
-                            if (!_.contains(event_settings.selected_authors, "UNKNOWN")) {
-                                return false
-                            }
-                        }
-                        else if (!_.contains(event_settings.selected_authors, i.properties.author)) {
-                            return false
-                        }
-
-                        // Public might not be set for all.
-                        if (!event_settings.show_public_and_private) {
-                            if (!_.has(i.properties, "public") || !i.properties.public) {
-                                return false
-                            }
-                        }
-                        // Same with the location method.
-                        if (!event_settings.show_automatic_and_manual) {
-                            if (!_.has(i.properties, "evaluation_mode") ||
-                                i.properties.evaluation_mode != "manual") {
-                                return false
-                            }
                         }
 
                         return true;
