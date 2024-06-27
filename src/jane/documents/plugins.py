@@ -7,6 +7,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
 from djangoplugins.point import PluginPoint
+from djangoplugins.models import Plugin
 
 from jane.exceptions import JaneException
 
@@ -149,8 +150,17 @@ def initialize_plugins():
             validators = []
         # Retreive permissions are also optional.
         if "retrieve_permissions" in contents:
-            retrieve_permissions = [
-                _i.get_model() for _i in contents["retrieve_permissions"]]
+            # retrieve_permissions = [
+            #     _i.get_model() for _i in contents["retrieve_permissions"]]
+            retrieve_permissions = []
+            for _i in contents["retrieve_permissions"]:
+                try:
+                    retrieve_permissions.append(_i.get_model())
+                except Plugin.DoesNotExist:
+                    print(
+                        f'Plugin "{_i.__name__}" does not exist in database. '
+                        f'might be new or not cleaned up after removal in '
+                        f'python code. Please check!')
         else:
             retrieve_permissions = []
         # As are upload permissions.
