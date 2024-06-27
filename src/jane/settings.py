@@ -304,7 +304,7 @@ JANE_FDSN_STATIONXML_SOURCE = "Jane"
 try:
     from .local_settings import *  # NOQA @UnusedWildImport
     from .local_settings import (
-        ADDITIONAL_INSTALLED_APPS, ADDITIONAL_MIDDLEWARE_CLASSES)
+        ADDITIONAL_INSTALLED_APPS, ADDITIONAL_MIDDLEWARE)
 except ImportError:
     print("ERROR: You need to copy local_settings.py.example into " +
           "local_settings.py and edit its content before running this "
@@ -318,22 +318,22 @@ else:
 
 # add additional apps from local_settings, if any
 INSTALLED_APPS.extend(ADDITIONAL_INSTALLED_APPS)
-for name, placement in ADDITIONAL_MIDDLEWARE_CLASSES.items():
+for name, placement in ADDITIONAL_MIDDLEWARE.items():
     before = placement.get('before', [])
     after = placement.get('after', [])
-    before_index = len(MIDDLEWARE_CLASSES)
+    before_index = len(MIDDLEWARE)
     after_index = -1
     # try to find the mentioned classes in the middleware and determine where
     # the additional middleware should be inserted
     # searching through list: https://stackoverflow.com/a/9542768
     for name_ in before:
         before_index = min(
-            next((i for i, item in enumerate(MIDDLEWARE_CLASSES)
+            next((i for i, item in enumerate(MIDDLEWARE)
                   if item == name_), before_index),
             before_index)
     for name_ in after:
         after_index = max(
-            next((i for i, item in enumerate(MIDDLEWARE_CLASSES)
+            next((i for i, item in enumerate(MIDDLEWARE)
                   if item == name_), after_index),
             after_index)
     if before_index <= after_index:
@@ -341,7 +341,7 @@ for name, placement in ADDITIONAL_MIDDLEWARE_CLASSES.items():
                "local_settings.py because before/after constraints can not "
                "be satisfied.").format(name)
         raise Exception(msg)
-    MIDDLEWARE_CLASSES.insert(before_index, name)
+    MIDDLEWARE.insert(before_index, name)
 
 
 # speed up tests
