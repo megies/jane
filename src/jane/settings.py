@@ -144,6 +144,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/jane.log',
+            'formatter': 'verbose',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -152,18 +158,23 @@ LOGGING = {
         },
     },
     'loggers': {
+        'jane': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'propagate': True,
             'level': 'WARN',
         },
         'django.db.backends': {
-            'handers': ['console'],
+            'handers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
             'propagate': False,
         },
@@ -299,6 +310,12 @@ except ImportError:
           "local_settings.py and edit its content before running this "
           "service.")
     exit()
+else:
+    try:
+        LOGGING['handlers']['file']['filename'] = LOGFILE
+    except:
+        pass
+
 # add additional apps from local_settings, if any
 INSTALLED_APPS.extend(ADDITIONAL_INSTALLED_APPS)
 for name, placement in ADDITIONAL_MIDDLEWARE_CLASSES.items():
