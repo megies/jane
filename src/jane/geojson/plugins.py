@@ -10,6 +10,7 @@ thus extensively commented.
 from jane.documents.plugins import (ValidatorPluginPoint, IndexerPluginPoint,
                                     DocumentPluginPoint,
                                     RetrievePermissionPluginPoint)
+from jane.local_settings import GEOTHERMIE_SITES
 
 
 class GeoJSONPlugin(DocumentPluginPoint):
@@ -109,49 +110,25 @@ def _geojson_category_site_retrieve_permission(class_name, category, site):
 # Retrieve permissions for small events attributed to a specific site (e.g. a
 # specific deep geothermal project), if users don't have these permissions
 # small events that are attributed to that site are not accessible to them
-sites = [
-    "Altdorf",
-    "Aschheim",
-    "Duerrnhaar",
-    "Erding",
-    "Freiham",
-    "Garching",
-    "Hoehenrain",
-    "Holzkirchen",
-    "Ismaning",
-    "Kirchstockach",
-    "Kirchweidach",
-    "Oberhaching",
-    "Poing",
-    "Pullach",
-    "Riem",
-    "Sauerlach",
-    "Simbach",
-    "Straubing",
-    "Taufkirchen",
-    "Traunreut",
-    "Unterfoehring",
-    "Unterhaching",
-    "Unterschleissheim",
-    "Waldkraiburg",
-    "Weilheim",
-    "UNKNOWN",
-    "PUBLIC",
-    ]
-categories = [
+# for these we have all data with site "PUBLIC"
+categories_public = [
     "Bohransatzpunkt",
-    "Bohrpfad",
-    "Stoerung",
     "Bewilligungsfeld",
     "Gemeinden",
+    ]
+# for these we have all data with specific site
+categories_fine_grained = [
+    "Bohrpfad",
+    "Stoerung",
     ]
 
 # add all geojson site/category permission plugins
 local = locals()
-for category in categories:
-    for site_ in sites:
+for category in categories_fine_grained:
+    for site_ in GEOTHERMIE_SITES:
+        # skip fine grained permissions for those categories
         permission_plugin_name = \
-            'GeoJSON{}at{}RetrievePermissionPlugin'.format(category, site_)
+            'GeoJSON{}At{}RetrievePermissionPlugin'.format(category, site_)
         local[permission_plugin_name] = \
             _geojson_category_site_retrieve_permission(
                 permission_plugin_name, category=category, site=site_)
@@ -189,10 +166,10 @@ class GeoJSONUnrecognizedRetrievePermissionPlugin(
             recognized_sites = set()
             recognized_category = set()
             # determine ids of items with recognized sites / categories
-            for site in sites:
+            for site in GEOTHERMIE_SITES:
                 for item in queryset.filter(json__site=site):
                     recognized_sites.add(item.id)
-            for category in categories:
+            for category in categories_public + categories_fine_grained:
                 for item in queryset.filter(json__category=category):
                     recognized_category.add(item.id)
             # determine ids that have both a recognized site and a recognized
