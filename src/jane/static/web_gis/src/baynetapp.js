@@ -82,7 +82,7 @@ module.factory('events', function($http, $log, jane_server) {
                                     "coordinates": [j.longitude, j.latitude]},
                                     {
                                     "type": "MultiLineString",
-                                    "coordinates": i.geometry.coordinates[1]}
+                                    "coordinates": i.geometry.geometries[1].coordinates}
                                 ]}
                         };
                         return geojson;
