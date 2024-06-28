@@ -242,7 +242,8 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                     // "name" will contain "Injektion" or "Produktion"
                     return function(feature, resolution) {
                         var well_type = feature.get('name');
-                        if (well_type.includes('Injektion')) { var color = '#0000FF'; }
+                        if (well_type == null) { var color = '#804000'; }
+                        else if (well_type.includes('Injektion')) { var color = '#0000FF'; }
                         else if (well_type.includes('Produktion')) { var color = '#FF0000'; }
                         else { var color = '#804000'; }
                         return new ol.style.Style({
