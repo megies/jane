@@ -276,7 +276,7 @@ class QuakeMLIndexerPlugin(IndexerPluginPoint):
                             (horizontal_uncertainty_min,
                              horizontal_uncertainty_max_azimuth + 90)):
                         azimuth = azimuth % 180
-                        distance = geopy.distance.VincentyDistance(
+                        distance = geopy.distance.geodesic(
                             kilometers=distance / 1e3)
                         end1 = distance.destination(
                             point=start, bearing=azimuth)
