@@ -278,7 +278,7 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
 
     // XXX: This has to be in sync with the base layer that has the default
     // visibility.
-    $scope.current_base_layer = "OpenTopoMap";
+    $scope.current_base_layer = "Open Street Map";
     // The map directive will fill this with a list of available base layers.
     $scope.base_layer_names_dropdown = [];
 

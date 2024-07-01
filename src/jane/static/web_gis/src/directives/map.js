@@ -37,34 +37,14 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
             // at any given time and they share their opacity setting.
             $scope.baseLayers = {
                 "OpenTopoMap": new ol.layer.Tile({
-                    visible: true,
+                    visible: false,
                     source: new ol.source.OSM({
                         url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
                         crossOrigin: null
                     })
                 }),
-                "Stamen Toner-Lite": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'toner-lite'})
-                }),
-                "Stamen Toner": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'toner'})
-                }),
-                "Stamen Watercolor": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.Stamen({layer: 'watercolor'})
-                }),
-                "MapQuest (Street)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.MapQuest({layer: 'osm'})
-                }),
-                "MapQuest (Satellite)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.MapQuest({layer: 'sat'})
-                }),
                 "Open Street Map": new ol.layer.Tile({
-                    visible: false,
+                    visible: true,
                     source: new ol.source.OSM()
                 }),
                 "Open Street Map (Humanitarian)": new ol.layer.Tile({
@@ -72,34 +52,6 @@ app.directive('openlayers3', function($q, $log, bing_key, $modal) {
                     source: new ol.source.OSM({
                         url: '//{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
                         crossOrigin: null
-                    })
-                }),
-                "OSM EU TOPO (4umaps.eu)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.OSM({
-                        url: '//4umaps.eu/{z}/{x}/{y}.png',
-                        crossOrigin: null
-                    })
-                }),
-                "Bing (Road)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'Road'
-                    })
-                }),
-                "Bing (Aerial)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'Aerial'
-                    })
-                }),
-                "Bing (Aerial with Labels)": new ol.layer.Tile({
-                    visible: false,
-                    source: new ol.source.BingMaps({
-                        key: bing_key,
-                        imagerySet: 'AerialWithLabels'
                     })
                 })
             };
