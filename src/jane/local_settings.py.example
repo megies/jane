@@ -33,6 +33,12 @@ DEFAULT_FROM_EMAIL = 'noreply@localhost'
 
 AUTO_LOGOUT_MINUTES = 60
 
+# size of http request body is limited to 2.5MB by django by default
+# if large files need to be uploaded (e.g. station metadata grouped in one
+# file) this needs to be set higher here or upload will fail.
+#DATA_UPLOAD_MAX_MEMORY_SIZE = 94371840  # 90 MB
+
+
 # see https://docs.djangoproject.com/en/dev/topics/cache/#setting-up-the-cache
 CACHE = {
     'default': {
