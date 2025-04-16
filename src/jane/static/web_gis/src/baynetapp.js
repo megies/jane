@@ -349,8 +349,12 @@ module.controller("BayNetController", function($scope, $log, stations, station_c
                 name += ' (Fürstenfeldbruck)';
             else if (prop.station === 'RLAS')
                 name += ' (Wettzell)';
-            else if (prop.station === 'BSPF')
-                name += ' (Pinon Flat)';
+            // we have two station codes for pinon flat in the same stationxml
+            // with the same station id (the id of the stationxml in django),
+            // so make sure we set it to BSPF here (the BlueSeis) otherwise it
+            // might get overwritten with PFOIX (the seismometer)
+            else if (prop.station === 'BSPF' || prop.station === 'PFOIX')
+                name = 'PY.BSPF (Pinon Flat)';
 
             $scope.stations[id] = name;
         }
