@@ -263,7 +263,7 @@ def contributors(request):  # @UnusedVariable
 
     xml = E.Contributors(
         E.total(str(len(values))),
-        *[E.Contributor(_i) for _i in values]
+        *[E.Contributor(str(_i)) for _i in values]
     )
 
     with io.BytesIO() as fh:
